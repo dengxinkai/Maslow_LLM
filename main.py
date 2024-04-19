@@ -7,22 +7,21 @@ relationship_history.append(relationship)
 role_response = ""
 history = f""
 score = 20
-user = "用户特别漂亮，是一个销售特别厉害的人"
 print(f"{RED}{BOLD}  挑战：{task}。{RESET}")
-print(f"{GREEN}{role}的背景{RESET}")
+print(f"{GREEN}{BOLD}{role}的背景{RESET}")
 # print(f"性别：{sex}\n外貌：{appearance}\n年龄：{age}\n职业：{occupation}\n教育状况：{education}\n个人特质：{characteristic}\n兴趣：{interest}\n婚姻状况：{marriage}\n经济情况：{economic}\n健康状况：{health}\n心理状况：{mental}")#透明模式
 
 print(f"性别：{sex}\n外貌：{appearance}\n年龄：***\n职业：***\n教育状况：***\n个人特质：***\n兴趣：***\n婚姻状况：***\n经济情况：***\n健康状况：***\n心理状况：***")#真实模式
-print(f"{BLUE}{role}对用户的了解{RESET}")
+print(f"{BLUE}{BOLD}{role}对用户的了解{RESET}")
 print(f"{user}")
-print(f'{CYAN}谈话场合{RESET}')
+print(f'{CYAN}{BOLD}谈话场合{RESET}')
 print(f'{occasion}')
 history = f"你的任务：{task}\n"
 ww = ""
+print(f"{RED}{BOLD}你们的初始关系：{relationship}{RESET}")
 while True:
-    print(f"{RED}{BOLD}你们的关系：{relationship}{RESET}")
     # 获取用户输入
-    user_input = input(f"\n输入文字交谈，输入a自动交谈，输入d让对方决策，输入q退出游戏\n")
+    user_input = input(f"\n输入文字交谈，输入s求助销售经理，输入f求助理财经理，输入d让对方决策，输入q退出游戏\n")
     if user_input.lower() == 'q':
         print("模拟结束，谢谢您的参与！")
         break
@@ -30,9 +29,14 @@ while True:
         print("对方开始决策...")
         decision(history,role,user,background,relationship_history,occasion,decide)
         break
-    if user_input.lower() == 'a':
-        user_input1 = auto_chat(history,role,role_response,user,background,relationship_history,occasion,task)
+    if user_input.lower() == 's':
+        update_sale_assistant('asst_q9yTNWJvPZ7Mv4ihGFOkYxhS', sale_assist_name, task, role, background, user, relationship_history, occasion, role_response, history)
+        user_input1 = get_sale_help("thread_GWJFzlZe5zsW0KK6X6SpAAH0",'asst_q9yTNWJvPZ7Mv4ihGFOkYxhS',role,role_response,history,relationship_history)
         user_input = re.search(r"用户说：([\w，。？！,.?!]+)", user_input1).group(1)
+    if user_input.lower() == 'f':
+        update_fm_assistant('asst_vVkQ5k14p8rm2iwH4GxuY07m', vector_store.id, assist_1, task, role, background, user, relationship_history, occasion, role_response, history)
+        user_input1 = get_fm_help("thread_Qx999ZM9UYIIY4xyEg8Xa8ns",'asst_vVkQ5k14p8rm2iwH4GxuY07m',role,role_response,history,relationship_history)
+        user_input = re.search(r"用户说：([\w，。？！,.?!]+)", user_input1.replace(" ", "")).group(1)
     history += f"用户说：{user_input}\n"
     # 调用函数并打印回复
     reply = task1(user_input, user,score,task,history,role,background,relationship_history,occasion)
@@ -44,7 +48,7 @@ while True:
     role_response = re.search(r"说的话：([\w，。？！,.?!]+)", reply).group(1)
     relationship_update = re.search(r"关系更新：([\w，。？！,.?!]+)", reply)
     if relationship_update:
-        relationship = relationship_update.group(1)   
+        relationship = relationship_update.group(1)
         relationship_history.append(relationship)
     reply += "\n"
     history += reply
