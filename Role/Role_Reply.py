@@ -1,9 +1,3 @@
-from openai import OpenAI
-import re
-
-# 假设您已经正确设置了userdata来获取API密钥
-client = OpenAI(api_key=userdata.get('api'))
-
 # 正确定义generate_reply函数
 def task1(ww, user,score,task,history,role,background,relationship_history,occasion):
     completion = client.chat.completions.create(
@@ -14,9 +8,9 @@ def task1(ww, user,score,task,history,role,background,relationship_history,occas
 ##Introduction
 {role}的背景：{background}
 {role}对用户的了解：{user}
-{role}和用户的关系变化历史：{relationship_history}         
+{role}和用户的关系变化历史：{relationship_history}
 谈话场合：{occasion}
-             
+
 ## Rules
 * 每次根据用户的回复，生成{role}的回复，回复的内容包括心情、满意程度和双方关系更新。
 * 现有的满意程度为{score}，每次交互会增加或者减少满意程度。
@@ -40,4 +34,3 @@ def task1(ww, user,score,task,history,role,background,relationship_history,occas
         ]
     )
     return completion.choices[0].message.content
-
