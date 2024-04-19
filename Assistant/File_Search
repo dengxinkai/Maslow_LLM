@@ -1,0 +1,35 @@
+#Rag第一步上传文件
+# 获取当前工作目录
+current_directory = os.getcwd()
+#上传文件
+uploaded = files.upload()
+for filename in uploaded.keys():
+    print('Uploaded file "{name}" with length {length} bytes'.format(
+        name=filename, length=len(uploaded[filename])))
+#获取文件地址
+file_path = os.path.join(current_directory, "gold.pdf")
+# 下载文件
+# files.download("/content/开题报告.doc")
+#V2 上传文件
+message_file1 = client.files.create(
+  file=open(file_path, "rb"), purpose="assistants"
+)
+
+#V2 新建向量
+vector_store = client.beta.vector_stores.create(
+  name="理财产品详情"
+)
+#Rag第二步弄入向量
+#V2 增加新建向量的文件
+vector_store_file1 = client.beta.vector_stores.files.create(
+  vector_store_id=vector_store.id,
+  file_id=message_file1.id
+)
+print(vector_store_file)
+
+#Rag第三步更新assistant
+#V2 更新助理
+assistant = client.beta.assistants.update(
+  assistant_id=assistant.id,
+  tool_resources={"file_search": {"vector_store_ids": [vector_store.id]}},
+)
