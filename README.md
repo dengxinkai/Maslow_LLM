@@ -1,4 +1,4 @@
-# Scuttlebutt
+# Perlocutionary Act
 LLM enhances the Scuttlebutt experience.
 LLM can serve as a conversational partner for casual chatting.
 
